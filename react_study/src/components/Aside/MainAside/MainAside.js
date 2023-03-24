@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import * as S from "./style";
 import Icon from "awesome-react-icons/lib/cjs/Icon";
-import { Navigation } from "react-minimal-side-navigation/lib";
 import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
+import { Navigation } from "react-minimal-side-navigation/lib";
 import { useNavigate } from "react-router-dom";
 import { HiHome } from "react-icons/hi";
 import { GrTest } from "react-icons/gr";
@@ -42,8 +42,20 @@ const MainAside = () => {
                         subNav: [
                             {
                                 title: "input1",
-                                itemId: "input1",
+                                itemId: "/sample/input/1",
                                 elemBefore: () => <BiListCheck />,
+                            },
+                        ],
+                    },
+                    {
+                        title: "List",
+                        itemId: "/users",
+                        elemBefore: () => <Icon name="users" />,
+                        subNav: [
+                            {
+                                title: "사용자 전체 조회",
+                                itemId: "/users",
+                                elemBefore: () => <Icon name="user" />,
                             },
                         ],
                     },
