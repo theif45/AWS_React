@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import * as S from "./style";
-import { useRef } from "react";
-
+// 컴포넌트가 렌더링 될 때 한번 실행
 const UserList = () => {
     useEffect(() => {
         console.log("컴포넌트 렌더링");
@@ -14,8 +13,12 @@ const UserList = () => {
         password: "",
         name: "",
         email: "",
+        modifyFlag: false,
     };
 
+    // useRef는 index를 만들어주는 기능도 가지고 있음
+    const userIndex = useRef(1);
+    const [users, setUsers] = useState([]);
     const [inputs, setInputs] = useState(user);
     const inputRefs = [useRef(), useRef(), useRef(), useRef()];
     const addButtonRef = useRef();
@@ -44,79 +47,93 @@ const UserList = () => {
                 default:
                     addButtonRef.current.click();
             }
-            if (index != 0) {
+            if (index !== 0) {
                 inputRefs[index].current.focus();
             }
         }
     };
 
-    const addHandler = (e) => {};
+    const addHandler = () => {
+        const user = {
+            ...inputs,
+        };
 
-    const users = [
-        {
-            id: 1,
-            username: "aaa",
-            password: "1234",
-            name: "AAA",
-            email: "aaa@gmail.com",
-        },
-        {
-            id: 2,
-            username: "bbb",
-            password: "1234",
-            name: "BBB",
-            email: "bbb@gmail.com",
-        },
-        {
-            id: 3,
-            username: "ccc",
-            password: "1234",
-            name: "CCC",
-            email: "ccc@gmail.com",
-        },
-    ];
+        user.id = userIndex.current++;
 
-    // useRef는 index를 만들어주는 기능도 가지고 있음
-    const userIndex = useRef(4);
+        setUsers([...users, user]);
+    };
+
+    const onRemove = (index) => {
+        // users.splice(index - 1, 1);
+        // setUsers([...users]);
+        setUsers(users.filter((user) => user.id !== index));
+    };
+
+    const onModify = (index) => {
+        setUsers(
+            users.map((user) => {
+                if (user.id === index) {
+                    setInputs({ ...user });
+                    user.modifyFlag = true;
+                } else {
+                    user.modifyFlag = false;
+                }
+                return user;
+            })
+        );
+    };
+
+    const onSave = (index) => {
+        setUsers(
+            users.map((user) => {
+                if (user.id === index) {
+                    return {
+                        ...inputs,
+                    };
+                }
+                return user;
+            })
+        );
+    };
 
     return (
         <div css={S.Container}>
             <div>
                 <input
+                    css={S.Input}
                     type="text"
                     onKeyUp={keyupHandler}
                     onChange={inputHandler}
                     placeholder="username"
                     name="username"
-                    value={0}
-                    ref="inputRefs[0]"
+                    ref={inputRefs[0]}
                 />
                 <input
+                    css={S.Input}
                     type="text"
                     onKeyUp={keyupHandler}
                     onChange={inputHandler}
                     placeholder="password"
                     name="password"
-                    value={0}
-                    ref="inputRefs[1]"
+                    ref={inputRefs[1]}
                 />
                 <input
+                    css={S.Input}
                     type="text"
                     onKeyUp={keyupHandler}
                     onChange={inputHandler}
                     placeholder="name"
                     name="name"
-                    value={0}
-                    ref="inputRefs[2]"
+                    ref={inputRefs[2]}
                 />
                 <input
+                    css={S.Input}
                     type="text"
                     onKeyUp={keyupHandler}
                     onChange={inputHandler}
                     placeholder="email"
                     name="email"
-                    value={0}
-                    ref="inputRefs[3]"
+                    ref={inputRefs[3]}
                 />
                 <button type="button" onClick={addHandler} ref={addButtonRef}>
                     추가
@@ -130,17 +147,93 @@ const UserList = () => {
                         <th css={S.ThAndTd}>password</th>
                         <th css={S.ThAndTd}>name</th>
                         <th css={S.ThAndTd}>email</th>
+                        <th css={S.ThAndTd}>update</th>
+                        <th css={S.ThAndTd}>delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map((user) => {
                         return (
-                            <tr>
+                            <tr key={user.id}>
                                 <td css={S.ThAndTd}>{user.id}</td>
-                                <td css={S.ThAndTd}>{user.username}</td>
-                                <td css={S.ThAndTd}>{user.password}</td>
-                                <td css={S.ThAndTd}>{user.name}</td>
-                                <td css={S.ThAndTd}>{user.email}</td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag ? (
+                                        <input
+                                            type="text"
+                                            onKeyUp={keyupHandler}
+                                            onChange={inputHandler}
+                                            placeholder="username"
+                                            name="username"
+                                            ref={inputRefs[0]}
+                                            defaultValue={user.username}
+                                        />
+                                    ) : (
+                                        user.username
+                                    )}
+                                </td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag ? (
+                                        <input
+                                            type="text"
+                                            onKeyUp={keyupHandler}
+                                            onChange={inputHandler}
+                                            placeholder="password"
+                                            name="password"
+                                            ref={inputRefs[1]}
+                                            defaultValue={user.password}
+                                        />
+                                    ) : (
+                                        user.password
+                                    )}
+                                </td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag ? (
+                                        <input
+                                            type="text"
+                                            onKeyUp={keyupHandler}
+                                            onChange={inputHandler}
+                                            placeholder="name"
+                                            name="name"
+                                            ref={inputRefs[2]}
+                                            defaultValue={user.name}
+                                        />
+                                    ) : (
+                                        user.name
+                                    )}
+                                </td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag ? (
+                                        <input
+                                            type="text"
+                                            onKeyUp={keyupHandler}
+                                            onChange={inputHandler}
+                                            placeholder="email"
+                                            name="email"
+                                            ref={inputRefs[3]}
+                                            defaultValue={user.email}
+                                        />
+                                    ) : (
+                                        user.email
+                                    )}
+                                </td>
+                                <td css={S.ThAndTd}>
+                                    {user.modifyFlag ? (
+                                        <button onClick={() => onSave(user.id)}>
+                                            확인
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => onModify(user.id)}
+                                        >
+                                            수정
+                                        </button>
+                                    )}
+                                </td>
+                                <td css={S.ThAndTd}>
+                                    <button onClick={() => onRemove(user.id)}>
+                                        삭제
+                                    </button>
+                                </td>
                             </tr>
                         );
                     })}

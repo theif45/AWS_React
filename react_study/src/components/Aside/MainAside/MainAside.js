@@ -59,6 +59,11 @@ const MainAside = () => {
                             },
                         ],
                     },
+                    {
+                        title: "TodoList",
+                        itemId: "/todo",
+                        elemBefore: () => <Icon name="book" />,
+                    },
                 ]}
             />
         </aside>
