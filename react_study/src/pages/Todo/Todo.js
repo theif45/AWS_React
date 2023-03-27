@@ -98,6 +98,8 @@ const Todo = () => {
         content: "",
     });
 
+    const [modifying, setModifying] = useState({ id: null, content: "" });
+
     const [todoList, setTodoList] = useState([]);
     const todoId = useRef(1);
 
@@ -131,6 +133,23 @@ const Todo = () => {
         );
     };
 
+    const onModify= (id, content) => {
+        setModifying({ id, content });
+      };
+
+
+    const onSave = (id) => {
+    const updatedTodoList = todoList.map((todo) =>
+        todo.id === id ? { ...todo, content: modifying.content } : todo
+    );
+    setTodoList(updatedTodoList);
+    setModifying({ id: null, content: "" });
+    };
+
+    const onModifyChange = (e) => {
+        setModifying({ ...modifying, content: e.target.value });
+    };
+
     return (
         <div css={TodoContainer}>
             <div css={TodoAddition}>
@@ -147,19 +166,29 @@ const Todo = () => {
                 </button>
             </div>
             {todoList.map((todo) => {
+                const isModifying = modifying.id === todo.id;
                 return (
                     <div css={TodoList} key={todo.id}>
-                        <div css={TodoContent}>{todo.content}</div>
-                        <div css={ItemGroup}>
-                            <button css={ItemButton}>
-                                <Icon name="edit-pencil-simple" />
-                            </button>
-                            <button
-                                css={ItemButton}
-                                onClick={() => onRemove(todo.id)}
-                            >
-                                <Icon name="trash" />
-                            </button>
+            {isModifying ? (
+              <input
+                css={TodoContent}
+                type="text"
+                value={modifying.content}
+                onChange={onModifyChange}
+              />
+            ) : (
+              <div css={TodoContent}>{todo.content}</div>
+            )}
+            <div css={ItemGroup}>
+              <button
+                css={ItemButton}
+                onClick={() => (isModifying ? onSave(todo.id) : onModify(todo.id, todo.content))}
+              >
+                <Icon name={isModifying ? "check" : "edit-pencil-simple"} />
+              </button>
+              <button css={ItemButton} onClick={() => onRemove(todo.id)}>
+                <Icon name="trash" />
+              </button>
                         </div>
                     </div>
                 );
