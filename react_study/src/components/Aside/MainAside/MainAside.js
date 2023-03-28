@@ -64,6 +64,11 @@ const MainAside = () => {
                         itemId: "/todo",
                         elemBefore: () => <Icon name="book" />,
                     },
+                    {
+                        title: "NumberCounter",
+                        itemId: "/number/counter",
+                        elemBefore: () => <Icon name="inbox" />,
+                    },
                 ]}
             />
         </aside>
