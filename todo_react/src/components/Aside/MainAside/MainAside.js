@@ -6,86 +6,47 @@ import { Navigation } from "react-minimal-side-navigation/lib";
 import { useNavigate } from "react-router-dom";
 import Icon from "awesome-react-icons/lib/cjs/Icon";
 import { HiHome } from "react-icons/hi";
+import MainAsideButton from "../MainAsideButton/MainAsideButton";
 
 const MainAside = () => {
     const navigate = useNavigate();
-    const [asideFlag, setAsideFlag] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const onHidden = () => {
-        setAsideFlag(false);
+        setIsOpen(false);
     };
 
     const onAppear = () => {
-        setAsideFlag(true);
+        setIsOpen(true);
     };
     return (
         <>
-            {asideFlag ? (
-                <aside css={S.style}>
-                    <Navigation
-                        activeItemId="/"
-                        onSelect={({ itemId }) => {
-                            navigate(itemId);
-                        }}
-                        items={[
-                            {
-                                title: "Home",
-                                itemId: "/",
-                                elemBefore: () => <HiHome />,
-                            },
-                            {
-                                title: "TodoList",
-                                itemId: "/todo",
-                                elemBefore: () => <Icon name="briefcase" />,
-                                subNav: [
-                                    {
-                                        title: "Todo",
-                                        itemId: "/todo",
-                                        elemBefore: () => <Icon name="book" />,
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </aside>
-            ) : (
-                <aside css={S.hidden}>
-                    <Navigation
-                        activeItemId="/"
-                        onSelect={({ itemId }) => {
-                            navigate(itemId);
-                        }}
-                        items={[
-                            {
-                                title: "Home",
-                                itemId: "/",
-                                elemBefore: () => <HiHome />,
-                            },
-                            {
-                                title: "TodoList",
-                                itemId: "/todo",
-                                elemBefore: () => <Icon name="briefcase" />,
-                                subNav: [
-                                    {
-                                        title: "Todo",
-                                        itemId: "/todo",
-                                        elemBefore: () => <Icon name="book" />,
-                                    },
-                                ],
-                            },
-                        ]}
-                    />
-                </aside>
-            )}
-            {asideFlag ? (
-                <button css={S.button} onClick={onHidden}>
-                    ◀
-                </button>
-            ) : (
-                <button css={S.buttonHidden} onClick={onAppear}>
-                    ▶
-                </button>
-            )}
+            <aside css={S.style(isOpen)}>
+                <Navigation
+                    activeItemId="/"
+                    onSelect={({ itemId }) => {
+                        navigate(itemId);
+                    }}
+                    items={[
+                        {
+                            title: "Home",
+                            itemId: "/",
+                            elemBefore: () => <HiHome />,
+                        },
+                        {
+                            title: "Todo",
+                            itemId: "/todo",
+                            elemBefore: () => <Icon name="briefcase" />,
+                        },
+                    ]}
+                />
+            </aside>
+            <MainAsideButton
+                isOpen={isOpen}
+                onClick={isOpen ? onHidden : onAppear}
+            >
+                {isOpen ? "◀" : "▶"}
+            </MainAsideButton>
         </>
     );
 };
