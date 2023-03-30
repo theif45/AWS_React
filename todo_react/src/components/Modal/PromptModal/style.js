@@ -46,7 +46,7 @@ export const modalMain = css`
 export const modalInput = css`
     outline: none;
     border: none;
-    border-bottom: 2px solid green;
+    border-bottom: 2px solid #6c40ad;
     width: 90%;
     height: 30px;
     box-shadow: 0 0 2px 1px white;

@@ -1,50 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import React from "react";
-
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import AddTodo from "../components/AddTodo/AddTodo";
-import PromptModal from "../components/Modal/PromptModal/PromptModal";
-import TodoList from "../components/TodoList/TodoList";
-
-const mainContainer = css`
-    margin: 10px auto;
-    width: 550px;
-    height: 100%;
-`;
-
-const mainHeader = css`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-`;
-
-const mainTitle = css`
-    margin: 20px 0 0 20px;
-    color: #121212;
-    font-size: 36px;
-    font-weight: 600;
-`;
-
-const todoContentList = css`
-    box-sizing: border-box;
-    display: flex;
-    flex-wrap: wrap;
-
-    padding: 20px;
-    width: 100%;
-    height: 88%;
-    color: #121212;
-    font-size: 14px;
-    overflow-y: auto;
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 5px;
-        background-color: #dbdbdb;
-    }
-`;
+import AddTodo from "../../components/AddTodo/AddTodo";
+import PromptModal from "../../components/Modal/PromptModal/PromptModal";
+import TodoList from "../../components/TodoList/TodoList";
+import * as S from "./style";
 
 const Todo = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -152,41 +113,48 @@ const Todo = () => {
 
     return (
         <>
-            <div css={mainContainer}>
-                <header css={mainHeader}>
-                    <h1 css={mainTitle}>TODO</h1>
-                    <AddTodo
-                        onChange={onChange}
-                        onClick={addTodo}
-                        onKeyUp={onKeyUp}
-                        value={input.todoContent}
+            <motion.div
+                initial={{ y: 800 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 1, delay: 0 }}
+                style={{ height: "100%" }}
+            >
+                <div css={S.mainContainer}>
+                    <header css={S.mainHeader}>
+                        <h1 css={S.mainTitle}>TODO</h1>
+                        <AddTodo
+                            onChange={onChange}
+                            onClick={addTodo}
+                            onKeyUp={onKeyUp}
+                            value={input.todoContent}
+                        />
+                    </header>
+                    <ul css={S.todoContentList}>
+                        {todoList.map((todo) => {
+                            return (
+                                <TodoList
+                                    todo={todo}
+                                    openModal={openModal}
+                                    deleteModal={deleteModal}
+                                />
+                            );
+                        })}
+                    </ul>
+                </div>
+                {isOpen ? (
+                    <PromptModal
+                        title={"Edit Todo"}
+                        todo={modifyTodo}
+                        todoList={todoList}
+                        setTodoList={setTodoList}
+                        modalState={modalState}
+                        setIsOpen={setIsOpen}
+                        updateTodo={updateTodo}
                     />
-                </header>
-                <ul css={todoContentList}>
-                    {todoList.map((todo) => {
-                        return (
-                            <TodoList
-                                todo={todo}
-                                openModal={openModal}
-                                deleteModal={deleteModal}
-                            />
-                        );
-                    })}
-                </ul>
-            </div>
-            {isOpen ? (
-                <PromptModal
-                    title={"Edit Todo"}
-                    todo={modifyTodo}
-                    todoList={todoList}
-                    setTodoList={setTodoList}
-                    modalState={modalState}
-                    setIsOpen={setIsOpen}
-                    updateTodo={updateTodo}
-                />
-            ) : (
-                ""
-            )}
+                ) : (
+                    ""
+                )}
+            </motion.div>
         </>
     );
 };

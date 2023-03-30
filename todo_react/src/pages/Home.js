@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React from "react";
 import { css } from "@emotion/react";
+import { motion } from "framer-motion";
 
 const style = css`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #e8df58;
     background-color: #8658e8;
     width: 100%;
     height: 100%;
@@ -15,7 +16,16 @@ const style = css`
 `;
 
 const Home = () => {
-    return <div css={style}>Todo List</div>;
+    return (
+        <motion.div
+            initial={{ y: 800 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 1, delay: 0 }}
+            css={style}
+        >
+            Todo List
+        </motion.div>
+    );
 };
 
 export default Home;

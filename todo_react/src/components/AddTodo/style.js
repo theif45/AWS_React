@@ -6,7 +6,7 @@ export const todoInputContainer = css`
     display: flex;
     align-items: flex-end;
     margin-bottom: 3px;
-    border-bottom: 1px solid #dbdbdb;
+    border-bottom: 2px solid #6c40ad;
     padding-right: 50px;
     width: 70%;
     height: 40px;
@@ -25,11 +25,15 @@ export const todoInput = css`
     padding: 0 70px;
     width: 100%;
     height: 100%;
-    color: #121212;
+    color: #e8df58;
+    background-color: #8658e8;
     font-size: 14px;
     transition: padding 0.5s ease;
     &:focus {
         padding: 0 10px;
+    }
+    &::placeholder {
+        color: white;
     }
 `;
 
@@ -43,15 +47,15 @@ export const addTodoButton = css`
     border: none;
     padding: 5px 20px;
     height: 100%;
-    color: #121212;
-    background-color: white;
+    color: #e8df58;
+    background-color: #8658e8;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     &:hover {
-        background-color: #fafafa;
+        background-color: #d8c1fb;
     }
     &:active {
-        background-color: #f0f0f0;
+        background-color: #533a7a;
     }
 `;

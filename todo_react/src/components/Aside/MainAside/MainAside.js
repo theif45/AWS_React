@@ -26,12 +26,18 @@ const MainAside = () => {
                     activeItemId="/"
                     onSelect={({ itemId }) => {
                         navigate(itemId);
+                        onHidden();
                     }}
                     items={[
                         {
                             title: "Home",
                             itemId: "/",
                             elemBefore: () => <HiHome />,
+                        },
+                        {
+                            title: "User Information",
+                            itemId: "/userinformation",
+                            elemBefore: () => <Icon name="user" />,
                         },
                         {
                             title: "Todo",

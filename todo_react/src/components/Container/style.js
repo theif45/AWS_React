@@ -6,6 +6,6 @@ export const Container = css`
     border: 2px solid #dbdbdb;
     width: 600px;
     height: 800px;
-    background-color: white;
+    background-color: #8658e8;
     overflow: hidden;
 `;
